@@ -1,0 +1,33 @@
+Short: CyberSound driver for file output
+Author: Patrik Axelsson
+Uploader: patrik.bo@gmail.com
+Type: mus/misc
+Architecture: m68k-amigaos >= 2.0.0
+Version: 1.0
+URL: https://github.com/patrikaxelsson/file.driver
+
+A CyberSound sound driver which writes the audio stream as 16-bit PCM to a
+file.
+
+Created to be able to redirect output of GMPlay to PIPE:.
+
+
+References:
+
+- CyberSound: http://aminet.net/package/disk/cdrom/14Bit_CDPlayer
+- GMPlay:     http://aminet.net/package/mus/midi/GMPlay13     
+
+
+## Installation
+
+Copy file.driver to DEVS:SoundDrivers/ or GMPlay/SoundDrivers/.
+
+
+## Examples
+
+> GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050
+> Play16 T:file.pcm RAW BITS=16 TRACKS=2 FREQ=22050
+
+> SetEnv CyberSound/SoundDrivers/file_Destination PIPE:stream.pcm 
+> Run GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050
+> <insert PIPE:-compatible cmdline player> PIPE:stream.pcm FREQUENCY=22050
