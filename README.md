@@ -13,7 +13,7 @@ Copy file.driver to DEVS:SoundDrivers/ or GMPlay/SoundDrivers/.
 
 ```
 > GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050
-> Play16 T:file.pcm RAW BITS=16 TRACKS=2 FREQ=22050
+> Play16 T:tune.pcm RAW BITS=16 TRACKS=2 FREQ=22050
 ```
 
 ```

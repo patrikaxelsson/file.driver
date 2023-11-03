@@ -79,7 +79,7 @@ static struct DriverBase *LibraryOpen(
 	}
 
 	if (-1 == GetVar("CyberSound/SoundDrivers/file_Destination", driverBase->destination, sizeof(driverBase->destination), GVF_GLOBAL_ONLY)) {
-		strcpy(driverBase->destination, "T:file.pcm");
+		strcpy(driverBase->destination, "T:tune.pcm");
 	}
 
 	driverBase->file = Open(driverBase->destination, MODE_NEWFILE);
