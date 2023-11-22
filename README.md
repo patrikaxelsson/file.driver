@@ -17,6 +17,13 @@ Copy file.driver to DEVS:SoundDrivers/ or GMPlay/SoundDrivers/.
 ```
 
 ```
+> version FULL AUDIO:
+AHI-Handler 4.2 (1997-04-09)
+> SetEnv CyberSound/SoundDrivers/file_Destination AUDIO:TYPE/SIGNED/BITS/16/CHANNELS/2/FREQUENCY/22050
+> GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050
+```
+
+```
 > SetEnv CyberSound/SoundDrivers/file_Destination PIPE:stream.pcm 
 > Run GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050
 > <insert PIPE:-compatible cmdline player> PIPE:stream.pcm FREQUENCY=22050
