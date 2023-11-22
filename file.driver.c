@@ -191,16 +191,22 @@ static void *AllocateBuffer(
 	return buffer;
 }
 
-/* This is simple, but it is not super important to optimize for the total
- * playback performance of GMPlay+file.driver.
+/* This is the hot loop of the driver, but it is not super important to
+ * optimize it for the total playback performance of GMPlay+file.driver as
+ * it does not contribute much to the total execution time.
+ *
  * Example on A3000 030@25MHz:
  * SetEnv CyberSound/SoundDrivers/file_Destination NIL:
- * UHC:C/time GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050
- * Result:
- * - When run normally:                         64.2s
- * - Commented out call to EncodeToStereoPcm(): 59.5s
+ * UHC:C/time GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050 QUIET
+ * Median result of three runs each:
+ * - With commented out call to EncodeToStereoPcm(): 57.87s
+ * - With straight forward C EncodeToStereoPcm():    61.33s
+ * - With optimized assembler EncodeToStereoPcm():   60.77s
  */
-static void EncodeToStereoPcm(UWORD *left, UWORD *right, ULONG samples, UWORD *dest) {
+ 
+/* Straight forward implementation in C, measures 3.03MBytes/sec on A3000 030@25MHz.
+ */
+/*static void EncodeToStereoPcm(UWORD *left, UWORD *right, ULONG samples, UWORD *dest) {
 	if (0 == samples) {
 		return;
 	}
@@ -208,7 +214,35 @@ static void EncodeToStereoPcm(UWORD *left, UWORD *right, ULONG samples, UWORD *d
 		*dest++ = *left++;
 		*dest++ = *right++;
 	} while(--samples);
-}
+}*/
+
+/* Optimized version in assembler, unrolled to repeat the loop eight times,
+ * measures 4.22MBytes/sec on A3000 030@25MHz.
+ */
+static void EncodeToStereoPcm(
+		__reg("a0") UWORD *left,
+		__reg("a1") UWORD *right,
+		__reg("d0") ULONG samples,
+		__reg("a2") UWORD *dest
+) =
+"	move.l	a2,-(sp)" "\n"
+"	move.w	d0,d1" "\n"
+"	lsr.l	#3,d0	; Number of loops given 8 rept" "\n"
+"	andi.w	#7,d1	; Samples to encode the first loop iteration" "\n"
+"	lsl.w	#2,d1	; Adjust to steps in instruction size of a rept" "\n"
+"	neg.w	d1" "\n"
+"	jmp     .afterRepeats(pc,d1.w)" "\n"
+".loop:" "\n"
+"	rept	8" "\n"
+"	move.w	(a0)+,(a2)+" "\n"
+"	move.w	(a1)+,(a2)+" "\n"
+"	endr" "\n"
+".afterRepeats:" "\n"
+"	sub.l	#1,d0" "\n"
+"	bge.s	.loop" "\n"
+"\n"
+"	move.l	(sp)+,a2" "\n"
+;
 
 static BOOL ProvideStream(
 		__reg("a6") struct DriverBase *driverBase,
