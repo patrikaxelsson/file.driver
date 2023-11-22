@@ -5,7 +5,7 @@
 #define LIBTYPE "driver"
 #define VERSION 1
 #define REVISION 1
-#define DATE "3.11.2023"
+#define DATE "22.11.2023"
 
 extern const char FileName[];
 extern const char IdString[];

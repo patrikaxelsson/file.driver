@@ -9,10 +9,10 @@ all: file.driver file.driver_debug
 # ending it with an empty function used to point/skip to the end in Resident
 # structure.
 file.driver: NoStart.c Resident.c Version.c file.driver.c ResidentEnd.c Version.h file.driver.h Debug.h ResidentEnd.h Makefile
-	vc +aos68k -D__NOLIBBASE__ -nostdlib -c99 -O2 -fastcall -sc -o $@ NoStart.c Resident.c Version.c file.driver.c ResidentEnd.c
+	vc +aos68k -D__NOLIBBASE__ -nostdlib -c99 -O2 -size -fastcall -sc -o $@ NoStart.c Resident.c Version.c file.driver.c ResidentEnd.c
 
 file.driver_debug: NoStart.c Resident.c Version.c file.driver.c ResidentEnd.c Version.h file.driver.h Debug.h ResidentEnd.h Makefile
-	vc +aos68k -D__NOLIBBASE__ -D__DEBUG__ -nostdlib -c99 -O2 -fastcall -sc -lamiga -ldebug -o $@ NoStart.c Resident.c Version.c file.driver.c ResidentEnd.c
+	vc +aos68k -D__NOLIBBASE__ -D__DEBUG__ -nostdlib -c99 -O2 -size -fastcall -sc -lamiga -ldebug -o $@ NoStart.c Resident.c Version.c file.driver.c ResidentEnd.c
 
 clean:
 	$(RM) file.driver file.driver_debug

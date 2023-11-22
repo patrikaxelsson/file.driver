@@ -24,14 +24,6 @@ struct DriverBase {
 	char destination[128];
 };
 
-static void *GetLibraryStart(const struct Library *library) {
-	return (uint8_t *) library - library->lib_NegSize;
-}
-
-static size_t GetLibrarySize(const struct Library *library) {
-	return (size_t) library->lib_NegSize + library->lib_PosSize;
-}
-
 static struct DriverBase *LibraryInit(
 		__reg("d0") struct DriverBase *driverBase,
 		__reg("a0") BPTR seglist,
@@ -111,7 +103,9 @@ static BPTR LibraryExpunge(__reg("a6") struct DriverBase *driverBase) {
 		Remove((struct Node *) driverBase);
 
 		const BPTR seglist = driverBase->seglist;
-		FreeMem(GetLibraryStart(&driverBase->library), GetLibrarySize(&driverBase->library));
+		const void *libraryStart = (uint8_t *) &driverBase->library - driverBase->library.lib_NegSize;
+		const size_t librarySize = driverBase->library.lib_NegSize + driverBase->library.lib_PosSize;
+		FreeMem(libraryStart, librarySize);
 
 		kprintf("%s: %08lx\n", __func__, seglist);
 		return seglist;

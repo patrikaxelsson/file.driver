@@ -3,8 +3,9 @@ Author: Patrik Axelsson
 Uploader: patrik.bo@gmail.com
 Type: mus/misc
 Architecture: m68k-amigaos >= 2.0.0
-Version: 1.0
+Version: 1.1
 URL: https://github.com/patrikaxelsson/file.driver
+Replaces: mus/misc/file.driver.lha
 
 A CyberSound sound driver which writes the audio stream as 16-bit PCM to a
 file.
