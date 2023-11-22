@@ -37,3 +37,14 @@ AHI-Handler 4.2 (1997-04-09)
 > SetEnv CyberSound/SoundDrivers/file_Destination PIPE:stream.pcm 
 > Run GMPlay MIDI-Files/Swamp_Thing.MID OUTPUT=file FREQUENCY=22050
 > <insert PIPE:-compatible cmdline player> PIPE:stream.pcm FREQUENCY=22050
+
+
+History:
+
+1.1 (2023-11-22):
+ - Changed default destination to be less confusing
+ - More examples
+ - More efficient
+
+1.0 (2023-11-01):
+ - Initial release
